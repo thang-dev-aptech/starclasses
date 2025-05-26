@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TeacherBox from './elements/TeacherBox';
 import teacherList from '../assets/teacherList.json';
-import '../assets/css/teacher.css';
+import '../assets/css/component.css';
 
 export default function Teacher() {
     const [selectedSubject, setSelectedSubject] = useState(0);
@@ -11,7 +11,7 @@ export default function Teacher() {
     );
 
     return (
-        <div className="text-center">
+        <div className="text-center pt-5" id='teacher'>
             <h1 className="fw-bold display-5 text-capitalize">Meet our expert teachers</h1>
             <p className="text-secondary fs-5">Our team of highly qualified educator are dedicated to helping you succeed</p>
             <div className="row mx-5">
