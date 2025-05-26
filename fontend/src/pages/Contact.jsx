@@ -2,6 +2,7 @@ import "../assets/css/contact.css";
 import { useState } from "react";
 import { ButtonCustom } from "../components/ButtonCustom";
 export const Contact = () => {
+  const [successMessage, setSuccessMessage] = useState("");
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -75,6 +76,19 @@ export const Contact = () => {
       }));
       return;
     }
+    setSuccessMessage(
+      "🎉 Cảm ơn bạn! Chúng tôi đã nhận được tin nhắn của bạn."
+    );
+    setTimeout(() => setSuccessMessage(""), 2000);
+
+    setFormData({
+      first_name: "",
+      last_name: "",
+      email: "",
+      subject: "",
+      phone: "",
+      message: "",
+    });
   };
 
   return (
@@ -161,14 +175,14 @@ export const Contact = () => {
                     <option value="Humanities">Humanities</option>
                     <option value="Technology">Technology</option>
                   </select>
-                  <div className="text-danger">
+                  <div className="text-danger ">
                     {errorMessage.subject && (
                       <span>{errorMessage.subject}</span>
                     )}
                   </div>
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-3 ">
                   <label className="form-label fw-medium">Phone Number</label>
                   <input
                     type="tel"
@@ -198,12 +212,17 @@ export const Contact = () => {
                       <span>{errorMessage.message}</span>
                     )}
                   </div>
+                  {successMessage && (
+                    <div className="alert alert-success fw-semibold mt-3">
+                      {successMessage}
+                    </div>
+                  )}
                 </div>
 
                 <ButtonCustom
                   text="Send Message"
                   className="btn btn-warning w-100 fw-semibold"
-                  onClick={handleSubmit}
+                  type="submit"
                 />
               </form>
             </div>
