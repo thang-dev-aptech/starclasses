@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Core\BaseModel;
 
 class ConsultRequest extends BaseModel {
-    protected $table = 'consult_requests';
+    protected $table = 'enquiries';
     
     public function getLatestRequests($limit = 10) {
         $sql = "SELECT * FROM {$this->table} ORDER BY created_at DESC LIMIT :limit";
@@ -34,6 +34,25 @@ class ConsultRequest extends BaseModel {
             'start_date' => $startDate,
             'end_date' => $endDate
         ]);
+        return $stmt->fetchAll();
+    }
+
+    public function getRecent($limit = 5) {
+        $limit = (int)$limit;
+        $sql = "SELECT * FROM {$this->table} ORDER BY created_at DESC LIMIT $limit";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll();
+    }
+
+    public function getAll($filter = []) {
+        $sql = "SELECT * FROM {$this->table}";
+        $params = [];
+        if (isset($filter['status'])) {
+            $sql .= " WHERE status = :status";
+            $params['status'] = $filter['status'];
+        }
+        $sql .= " ORDER BY created_at DESC";
+        $stmt = $this->db->query($sql, $params);
         return $stmt->fetchAll();
     }
 }

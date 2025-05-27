@@ -1,6 +1,6 @@
 <!-- admin/teachers.php -->
 <?php include __DIR__ . '/partials/header.php'; ?>
-<?php include __DIR__ . '/partials/sidebar.php'; ?>
+<!-- <?php include __DIR__ . '/partials/sidebar.php'; ?> -->
 <?php
 require_once __DIR__ . '/../app/models/Teacher.php';
 use App\Models\Teacher;
@@ -33,13 +33,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
     // Xử lý upload ảnh nếu có
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = __DIR__ . '/../storage/uploads/teachers/';
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/teachers/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
         $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
         $filename = uniqid() . '.' . $ext;
         $filepath = $uploadDir . $filename;
         if (move_uploaded_file($_FILES['image']['tmp_name'], $filepath)) {
-            $data['image'] = 'uploads/teachers/' . $filename;
+            $data['image'] = $filename;
         }
     }
     if (isset($_POST['edit_id']) && $_POST['edit_id']) {
@@ -169,9 +169,9 @@ if ($filterSubject !== '' && $filterSubject !== 'all') {
                                     <?php
                                     $image = $teacher['image'] ?? '';
                                     $isImage = preg_match('/\.(jpg|jpeg|png|gif)$/i', $image);
-                                    $imagePath = __DIR__ . '/../storage/' . $image;
+                                    $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/teachers/' . $image;
                                     if ($isImage && file_exists($imagePath)) {
-                                        echo '<img src="/storage/' . htmlspecialchars($image) . '" alt="' . htmlspecialchars($teacher['teacher_name']) . '" style="width:40px;height:40px;object-fit:cover;">';
+                                        echo '<img src="/uploads/teachers/' . htmlspecialchars($image) . '" alt="' . htmlspecialchars($teacher['teacher_name']) . '" style="width:40px;height:40px;object-fit:cover;">';
                                     } else {
                                         echo '<img src="/assets/no-image.png" alt="Không có ảnh" style="width:40px;height:40px;object-fit:cover;">';
                                     }

@@ -71,11 +71,7 @@ body {
 
 /* Main content styles */
 .main-content {
-  flex: 1;
-  margin-left: 250px;
-  min-height: 100vh;
   background-color: #f8f9fc;
-  transition: all 0.3s ease;
 }
 
 .main-content header {

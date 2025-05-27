@@ -12,7 +12,7 @@ class Teacher {
         $this->db = Database::getInstance()->getConnection();
     }
 
-    public function getAll() {
+    public function getAll($search = '', $category = '') {
         $stmt = $this->db->query("SELECT * FROM teachers ORDER BY id DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -69,5 +69,12 @@ class Teacher {
     public function delete($id) {
         $stmt = $this->db->prepare("DELETE FROM teachers WHERE id = ?");
         return $stmt->execute([$id]);
+    }
+
+    public function getRecent($limit = 5) {
+        $limit = (int)$limit;
+        $stmt = $this->db->prepare("SELECT * FROM teachers ORDER BY created_at DESC LIMIT $limit");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

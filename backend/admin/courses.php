@@ -1,5 +1,5 @@
 <?php include __DIR__ . '/partials/header.php'; ?>
-<?php include __DIR__ . '/partials/sidebar.php'; ?>
+<!-- <?php include __DIR__ . '/partials/sidebar.php'; ?> -->
 <?php
 require_once __DIR__ . '/../app/models/Course.php';
 use App\Models\Course;
@@ -34,13 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
     // Xử lý upload ảnh nếu có
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = __DIR__ . '/../storage/uploads/courses/';
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/uploads/courses/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
         $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
         $filename = uniqid() . '.' . $ext;
         $filepath = $uploadDir . $filename;
         if (move_uploaded_file($_FILES['image']['tmp_name'], $filepath)) {
-            $data['image'] = 'uploads/courses/' . $filename;
+            $data['image'] = $filename;
         }
     }
     if (isset($_POST['edit_id']) && $_POST['edit_id']) {
@@ -160,12 +160,10 @@ if ($filterCategory !== '' && $filterCategory !== 'all') {
                                     <?php
                                     $image = $course['image'] ?? '';
                                     $isImage = preg_match('/\.(jpg|jpeg|png|gif)$/i', $image);
-                                    $imagePath = __DIR__ . '/../storage/' . $image;
+                                    $imagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/courses/' . $image;
                                     if ($isImage && file_exists($imagePath)) {
-                                        // Đường dẫn ảnh hợp lệ
-                                        echo '<img src="/storage/' . htmlspecialchars($image) . '" alt="' . htmlspecialchars($course['course_name']) . '" style="width:40px;height:40px;object-fit:cover;">';
+                                        echo '<img src="/uploads/courses/' . htmlspecialchars($image) . '" alt="' . htmlspecialchars($course['course_name']) . '" style="width:40px;height:40px;object-fit:cover;">';
                                     } else {
-                                        // Ảnh mặc định
                                         echo '<img src="/assets/no-image.png" alt="Không có ảnh" style="width:40px;height:40px;object-fit:cover;">';
                                     }
                                     ?>

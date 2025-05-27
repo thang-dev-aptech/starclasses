@@ -1,0 +1,167 @@
+/* src/admin/pages/AdminLoginPage.module.css */
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    /* Sử dụng màu nền nhẹ nhàng hơn hoặc một gradient tinh tế hơn */
+    background: linear-gradient(135deg, #eef1f5 0%, #dDE3E9 100%); /* Hơi xám xanh nhẹ */
+    padding: 20px; /* Thêm padding để nội dung không sát viền trên mobile */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Gợi ý font chữ hiện đại */
+    transition: background-color 0.3s ease; /* Thêm transition cho background nếu có thay đổi */
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px; /* Tăng khoảng cách một chút */
+    opacity: 0; /* Cho animation */
+    transform: translateY(-20px); /* Cho animation */
+    animation: fadeInUp 0.6s 0.2s forwards; /* Animation fadeInUp */
+}
+
+.logo {
+    max-width: 180px; 
+    max-height: 100px; 
+    
+}
+
+.panelTitle {
+    font-size: 1.1rem; /* Điều chỉnh kích thước nếu cần */
+    color: #34495e; /* Một màu tối, dịu mắt hơn */
+    font-weight: 600; /* Giảm một chút độ đậm nếu font đã rõ */
+    letter-spacing: 0.5px; /* Giảm letter-spacing nếu font đã thoáng */
+    text-transform: uppercase; /* Thống nhất viết hoa */
+}
+
+.loginCard {
+    background-color: #ffffff;
+    padding: 35px 45px; /* Tăng padding cho card */
+    border-radius: 12px; /* Bo góc nhiều hơn một chút */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); /* Bóng đổ mềm mại hơn */
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    opacity: 0; /* Cho animation */
+    transform: translateY(20px); /* Cho animation */
+    animation: fadeInUp 0.6s 0.4s forwards; /* Animation fadeInUp, trễ hơn header */
+}
+
+.cardTitle {
+    font-size: 2rem; /* Tăng kích thước tiêu đề card */
+    margin-bottom: 30px;
+    color: #2c3e50; /* Màu tối hơn một chút cho tiêu đề */
+    font-weight: 600;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup {
+    margin-bottom: 25px; /* Tăng khoảng cách giữa các group */
+    text-align: left;
+}
+
+.label {
+    display: block;
+    margin-bottom: 10px; /* Tăng khoảng cách label và input */
+    font-weight: 500; /* Giảm độ đậm một chút */
+    color: #555e68;
+    font-size: 0.9rem;
+}
+
+.input {
+    width: 100%;
+    padding: 14px 18px; /* Tăng padding cho input để cảm giác "thoáng" hơn */
+    border: 1px solid #dce4ec; /* Màu border nhạt hơn */
+    border-radius: 8px; /* Bo góc input nhiều hơn */
+    box-sizing: border-box;
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Thêm transition cho box-shadow */
+}
+
+.input::placeholder {
+    color: #adb5bd; /* Màu placeholder nhạt hơn */
+}
+
+.input:focus {
+    border-color: #3b82f6; /* Màu xanh dương hiện đại hơn */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); /* Hiệu ứng focus mềm mại hơn */
+}
+
+.submitButton {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); /* Gradient cho nút */
+    color: white;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Transition cho nhiều thuộc tính */
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2); /* Bóng đổ cho nút */
+    text-transform: uppercase; /* Đồng bộ với panel title nếu muốn */
+}
+
+.submitButton:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+    transform: translateY(-2px); /* Hiệu ứng nhấc nút lên khi hover */
+}
+
+.submitButton:active {
+    transform: translateY(0); /* Nút trở lại vị trí cũ khi nhấn */
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+}
+
+
+.submitButton:disabled {
+    background: #bdc3c7; /* Màu xám cho nút bị disable */
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.errorMessage {
+    color: #e74c3c; /* Màu đỏ tươi hơn cho lỗi */
+    background-color: #ffebee; /* Nền nhạt cho thông báo lỗi */
+    border: 1px solid #e74c3c;
+    border-radius: 6px;
+    padding: 10px 15px; /* Padding cho thông báo lỗi */
+    margin-bottom: 20px; /* Khoảng cách thông báo lỗi */
+    font-size: 0.875rem;
+    text-align: left; /* Căn lề trái cho text lỗi */
+    display: flex; /* Cho icon nếu có */
+    align-items: center;
+}
+
+/* Ví dụ nếu bạn muốn thêm icon vào errorMessage */
+/* .errorMessage::before {
+    content: '⚠️';
+    margin-right: 8px;
+    font-size: 1.1rem;
+} */
+
+.footer {
+    margin-top: 50px; /* Tăng khoảng cách footer */
+    color: #7f8c8d; /* Màu chữ footer nhạt hơn */
+    font-size: 0.875rem;
+    opacity: 0; /* Cho animation */
+    transform: translateY(20px); /* Cho animation */
+    animation: fadeInUp 0.6s 0.6s forwards; /* Animation fadeInUp, trễ hơn card */
+}
+
+/* Định nghĩa keyframes cho animation */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

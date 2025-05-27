@@ -15,7 +15,9 @@ class CourseController extends BaseController {
 
     public function index() {
         try {
-            $courses = $this->courseModel->getAll();
+            $search = $_GET['search'] ?? '';
+            $category = $_GET['category'] ?? '';
+            $courses = $this->courseModel->getAll($search, $category);
             return $this->success($courses);
         } catch (\Exception $e) {
             return $this->error('Failed to fetch courses');
@@ -33,18 +35,6 @@ class CourseController extends BaseController {
             return $this->error('Failed to fetch course');
         }
     }
-    public function showByName() {
-        $name = $_GET['name'] ?? '';
-        if (empty($name)) {
-            return $this->error('Missing course name', 400);
-        }
-        $course = $this->courseModel->getByName($name);
-        if (!$course) {
-            return $this->error('Course not found', 404);
-        }
-        return $this->success($course);
-    }
-
 
     public function store() {
         $errors = $this->validateRequest([
@@ -66,29 +56,19 @@ class CourseController extends BaseController {
             }
 
             $courseData = [
-                'courses_name' => $_POST['course_name'], // Sửa thành courses_name để match với DB
+                'course_name' => $_POST['course_name'],
                 'description' => $_POST['description'],
                 'short_description' => $_POST['short_description'] ?? '',
                 'price' => $_POST['price'],
                 'category' => $_POST['category'],
-                'image_path' => $imagePath, // Sửa thành image_path để match với DB
-                'is_active' => isset($_POST['is_active']) ? 1 : 0,
-                'rating' => $_POST['rating'] ?? 0,
-                'rating_count' => $_POST['rating_count'] ?? 0
+                'rating' => $_POST['rating'],
+                'rating_count' => $_POST['rating_count'],
+                'image' => $imagePath,
+                'is_active' => isset($_POST['is_active']) ? 1 : 0
             ];
 
             $courseId = $this->courseModel->create($courseData);
             $course = $this->courseModel->getById($courseId);
-
-            // Assign teachers if provided
-            if (isset($_POST['teacher_ids'])) {
-                $teacherIds = is_array($_POST['teacher_ids']) 
-                    ? $_POST['teacher_ids'] 
-                    : explode(',', $_POST['teacher_ids']);
-                foreach ($teacherIds as $teacherId) {
-                    $this->courseModel->assignTeacher($courseId, $teacherId);
-                }
-            }
 
             return $this->success($course, 'Course created successfully');
         } catch (\Exception $e) {
@@ -114,20 +94,19 @@ class CourseController extends BaseController {
                 'description' => $_POST['description'],
                 'short_description' => $_POST['short_description'] ?? '',
                 'price' => $_POST['price'],
+                'rating' => $_POST['rating'],
+                'rating_count' => $_POST['rating_count'],
                 'category' => $_POST['category'],
-                'image' => null,
-                'is_active' => isset($_POST['is_active']) ? 1 : 0,
-                'rating' => $_POST['rating'] ?? 0,
-                'rating_count' => $_POST['rating_count'] ?? 0
+                'is_active' => isset($_POST['is_active']) ? $_POST['is_active'] : 0
             ];
 
             // Handle file upload if new image is provided
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 $courseData['image'] = $this->handleImageUpload($_FILES['image']);
             } else {
-                // Nếu không upload ảnh mới, giữ nguyên ảnh cũ
-                $old = $this->courseModel->getById($id);
-                $courseData['image'] = $old['image'];
+                // Keep existing image if no new image uploaded
+                $oldCourse = $this->courseModel->getById($id);
+                $courseData['image'] = $oldCourse['image'];
             }
 
             $this->courseModel->update($id, $courseData);
@@ -147,7 +126,7 @@ class CourseController extends BaseController {
     }
 
     private function handleImageUpload($file) {
-        $uploadDir = __DIR__ . '/../../storage/uploads/courses/';
+        $uploadDir = __DIR__ . '/../../public/uploads/courses/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
